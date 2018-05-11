@@ -5,16 +5,15 @@
         .module('app')
         .controller('app.views.products.product_index', ProductController)
     
-    ProductController.$inject =
+        ProductController.$inject =
         [
             '$uibModal',
             'abp.services.app.product',
-            '$location',
             '$state',
             '$timeout'
         ];
 
-    function ProductController($uibModal, productService, $location, $state, $timeout) {
+    function ProductController($uibModal, productService, $state, $timeout) {
         /* jshint validthis:true */
         
         var vm = this;
@@ -30,7 +29,7 @@
         activate();
 
         function activate() {
-            abp.ui.block();
+            abp.ui.setBusy();
             getProducts();
         }
 
@@ -40,15 +39,21 @@
 
         function getProducts() {
             productService.getAllProducts({})
-                .then(fillProducts, errorMessage);
+                .then(fillProducts, errorMessage)
+                .catch(unblockByError);
 
             function fillProducts(result) {
                 vm.products = result.data.products;
-                abp.ui.unblock();
+                abp.ui.clearBusy();
+            }
+
+            function unblockByError() {
+                abp.ui.clearBusy();
             }
         }
 
         function errorMessage(result) {
+            abp.ui.clearBusy();
             abp.notify.error(result);
         }
 
@@ -63,9 +68,17 @@
 
         function createProduct() {
             var modalInstance = $uibModal.open({
-                templateUrl: '/App/Main/views/products/product_add.cshtml',
-                controller: 'app.views.products.product_addModal as vm',
-                backdrop: 'static'
+                templateUrl: '/App/Main/views/products/product_create_or_edit.cshtml',
+                controller: 'app.views.products.product_create_or_edit as vm',
+                backdrop: 'static',
+                resolve: {
+                    id: function () {
+                        return 0;
+                    },
+                    isEditing: function () {
+                        return false;
+                    }
+                }
             });
 
             modalInstance.result.then(function () {
@@ -75,12 +88,15 @@
 
         function editProduct(prod) {
             var modalInstance = $uibModal.open({
-                templateUrl: '/App/Main/views/products/product_edit.cshtml',
-                controller: 'app.views.products.product_editModal as vm',
+                templateUrl: '/App/Main/views/products/product_create_or_edit.cshtml',
+                controller: 'app.views.products.product_create_or_edit as vm',
                 backdrop: 'static',
                 resolve: {
                     id: function () {
                         return prod.id;
+                    },
+                    isEditing: function () {
+                        return true;
                     }
                 }
             });
@@ -96,7 +112,7 @@
                 "Are you sure?",
                 function (result) {
                     if (result) {
-                        productService.delete(prod.id)
+                        productService.deleteProduct(prod.id)
                             .then(deletedMessage, errorMessage);
                     }
                 });
