@@ -19,14 +19,20 @@
                     </thead>
                     <tbody>
                         <tr ng-repeat="product in vm.products">
-                            <td>{{product.name}}</td>
-                            <td>{{product.description}}</td>
-                            <td>$ {{product.value}}</td>
-                            <td>
-                                <select ng-model="vm.selected" ng-change="vm.optionSelected(product)">
-                                    <option value="Edit">@L("Edit")</option>
-                                    <option value="Delete">@L("Delete")</option>
-                                </select>
+                            <td class="td--1">{{product.name}}</td>
+                            <td class="td--2"><div class="table-truncate__body">{{product.description}}</div></td>
+                            <td class="td--3">$ {{product.value}}</td>
+                            <td class="td--4">
+                                <div class="pull-right">
+                                    <button class="btn bg-primary text-white overdue"
+                                            ng-click="vm.editProduct(product)">
+                                        <span class="fa fa-edit text-white">&nbsp;</span>@L("Edit")
+                                    </button>
+                                    <button class="btn bg-secondary text-white overdue"
+                                            ng-click="vm.delete(product)">
+                                        <span class="fa fa-trash text-white">&nbsp;</span>@L("Delete")
+                                    </button>
+                                </div>
                             </td>
                         </tr>
                     </tbody>
@@ -34,7 +40,7 @@
                 <!-- ******************************************************** -->
                 <div class="col-lg-12">
                     <div class="pull-right">
-                        <button class="btn bg-success text-white overdue"
+                        <button class="btn bg-primary text-white overdue"
                                 ng-click="vm.createProduct()">
                             <span class="fa fa-plus text-white">&nbsp;</span>@L("New")
                         </button>
@@ -44,3 +50,34 @@
         </div>
     </div>
 </div>
+<style>
+    .table-truncate {
+        position: relative;
+    }
+
+    .table-truncate__body {
+        position: absolute;
+        max-width: 95%;
+        white-space: nowrap;
+        overflow: hidden;
+        text-overflow: ellipsis;
+    }
+
+    .td--1 {
+        width: 20%;
+    }
+
+    .td--2 {
+        width: 50%;
+    }
+
+    .td--3 {
+        width: 10%;
+        vertical-align: top;
+    }
+
+    .td--4 {
+        width: 20%;
+        vertical-align: top;
+    }
+</style>

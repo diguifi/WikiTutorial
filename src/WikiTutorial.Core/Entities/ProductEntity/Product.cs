@@ -12,5 +12,18 @@ namespace WikiTutorial.Entities.ProductEntity
         public string Name { get; set; }
         public string Description { get; set; }
         public float Value { get; set; }
+
+        public Product()
+        {
+            this.CreationTime = DateTime.Now;
+        }
+
+        public Product(string name, string description, float value)
+        {
+            this.CreationTime = DateTime.Now;
+            this.Name = name;
+            this.Description = description;
+            this.Value = value;
+        }
     }
 }

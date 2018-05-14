@@ -21,7 +21,7 @@
         vm.cancel = cancel;
 
         vm.isEditing = isEditing;
-        vm.product = [];
+        vm.product = {};
 
         activate();
 
@@ -45,7 +45,7 @@
 
         function create() {
             abp.ui.setBusy();
-            productService.createProductAsync({ input: vm.product })
+            productService.createProduct(vm.product)
                 .then(success)
                 .catch(unblockByError);
         }
@@ -59,8 +59,8 @@
 
         function success() {
             abp.ui.clearBusy();
-            abp.notify.info(App.localize('SavedSuccessfully'));
-            $uibModalInstance.close();
+            //abp.notify.info(App.localize('SavedSuccessfully'));
+            $uibModalInstance.close({});
         }
 
         function errorMessage(result) {
@@ -68,8 +68,8 @@
             abp.notify.error(result);
         }
 
-        function unblockByError() {
-            console.log("ERROR");
+        function unblockByError(error) {
+            console.log(error);
             abp.ui.clearBusy();
         }
 

@@ -21,9 +21,7 @@
         vm.editProduct = editProduct;
         vm.delete = Delete;
         vm.refresh = refresh;
-        vm.optionSelected = optionSelected;
 
-        vm.selected = "";
         vm.products = [];
 
         activate();
@@ -55,15 +53,6 @@
         function errorMessage(result) {
             abp.ui.clearBusy();
             abp.notify.error(result);
-        }
-
-        function optionSelected(prod) {
-            if (vm.selected == 'Edit') {
-                editProduct(prod);
-            }
-            else if (vm.selected == 'Delete') {
-                Delete(prod);
-            }
         }
 
         function createProduct() {
@@ -107,21 +96,25 @@
         }
 
         function Delete(prod) {
-            abp.message.confirm(
-                "Delete product '" + prod.name + "'",
-                "Are you sure?",
-                function (result) {
-                    if (result) {
-                        productService.deleteProduct(prod.id)
-                            .then(deletedMessage, errorMessage);
-                    }
-                });
-
-            function deletedMessage() {
-                abp.notify.info('SavedSuccessfully');
-                getProducts();
-            }
+            swal({
+                title: "Delete product",
+                text: "Are you sure you want to delete '" + prod.name + "'?",
+                type: "warning",
+                showCancelButton: true,
+                confirmButtonColor: "#DD6B55",
+                confirmButtonText: "Yes, delete it!",
+                closeOnConfirm: false,
+                html: false
+            }, function () {
+                productService.deleteProduct(prod.id)
+                    .then(deletedMessage, errorMessage);
+                function deletedMessage() {
+                    swal("Deleted!",
+                        "Your product has been deleted.",
+                        "success");
+                    getProducts();
+                }
+            });
         }
-
     }
 })();
