@@ -29,5 +29,7 @@
     <text name="Edit" value="Edit" />
     <text name="Delete" value="Delete" />
     <text name="Ok" value="Ok" />
+    <text name="Cancel" value="Cancel" />
+    <text name="Save" value="Save" />
   </texts>
 </localizationDictionary>
