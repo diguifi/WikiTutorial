@@ -1,5 +1,5 @@
 # WikiTutorial
-Simple CRUD implementation on ASP.NET Boilerplate for a VSTS Wiki tutorial
+Simple CRUD implementation on [ASP.NET Boilerplate](https://aspnetboilerplate.com/) (raw sample without login, register, user, role and tenant management pages) for a Wiki tutorial
 
 Setup steps:
 - open in Visual Studio
